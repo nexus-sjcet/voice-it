@@ -7,14 +7,10 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a>
-    <img src="https://res.cloudinary.com/rxg/image/upload/v1682167700/lab-management/computer-science-lab-logo-icon-design-vector-22915987-removebg-preview_1_blx6rr.png" alt="Logo" width="250" height="250">
-  </a>
-
-  <h3 align="center">Lab Management System</h3>
+  <h3 align="center">Voice It</h3>
 
   <p align="center">
-    Bookings, Reports, Seat allocations and much more!! 
+    Comment with voice in vscode 
     <br />
   </p>
 </div>
@@ -43,18 +39,15 @@
 
 ## About The Project
 
-A software that assists college faculties to maintain and manage the laboratory.
+Comment with voice in vscode
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Built With
 
-- [ExpressJS](https://expressjs.com/)
-- [Prisma](https://www.prisma.io/)
 - [Next.js](https://nextjs.org/)
-- [ChakraUI](https://chakra-ui.com/)
-- [Supabase Auth](https://supabase.com/docs/guides/auth)
-- [CapacitorJS](https://capacitorjs.com)
+- [Tailwind](https://tailwindcss.com/)
+- [TypeScript](https://typescriptlang.org/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -66,7 +59,7 @@ A software that assists college faculties to maintain and manage the laboratory.
 
 You need to install
 
-1. [Node v18](https://nodejs.org/en/)
+1. [Node v16](https://nodejs.org/en/)
 2. [pnpm](https://pnpm.io/)
 
 ### Installation
@@ -74,7 +67,7 @@ You need to install
 1. Clone the repo
 
    ```sh
-   git clone https://github.com/reenphygeorge/sjcet-labs.git
+   git clone https://github.com/nexus-sjcet/voice-it
    ```
 
 2. Install all the NPM packages all the applications.
@@ -87,48 +80,17 @@ You need to install
 
 3. Copy the `.env.example` for each applications to `.env` in the same directory and fill the values required
 
-4. Start the api dev server and open `http://localhost:8000`
-
-   ```sh
-   pnpm --filter api dev
-   ```
-
-5. Start the web application dev server and open `http://localhost:3000`
+4. Start the landing page dev server
 
    ```sh
    pnpm --filter web dev
    ```
 
-6. Build & export static content
+5. Start the browser extension dev server
 
    ```sh
-   pnpm --filter web static
+   pnpm --filter browser dev
    ```
-
-7. Sync changes with capacitor
-
-   ```sh
-   pnpm --filter web cap-sync
-   ```
-
-8. Open `android` directory in Android-Studio & `ios` directory in XCode to build the gradle.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-### Installation with Docker compose
-
-| Not ready yet. Coming soon
-
-1. You need to install
-
-- [Docker](https://www.docker.com/) / [Podman](https://podman.io/)
-- [Docker Compose](https://docs.docker.com/compose/)
-
-2. Run
-
-```sh
-docker-compose up
-```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -140,16 +102,22 @@ docker-compose up
   All the commands for applications can be executed from the root directory using PNPM Workspace and Turborepo.
   </summary>
 
-1. Web application PNPM commands
+1. Landing page PNPM commands
 
    ```sh
      pnpm --filter web <pnpm options>
    ```
 
-2. API Server PNPM commands
+2. Browser Extension PNPM commands
 
    ```sh
-     pnpm --filter api <pnpm options>
+     pnpm --filter browser <pnpm options>
+   ```
+
+3. VSCode Extension PNPM commands
+
+   ```sh
+     pnpm --filter vscode <pnpm options>
    ```
 
 3. Turbo Pipeline Commands
@@ -197,13 +165,13 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-[contributors-shield]: https://img.shields.io/github/contributors/reenphygeorge/sjcet-labs.svg?style=for-the-badge
-[contributors-url]: https://github.com/reenphygeorge/sjcet-labs/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/reenphygeorge/sjcet-labs.svg?style=for-the-badge
-[forks-url]: https://github.com/reenphygeorge/sjcet-labs/network/members
-[stars-shield]: https://img.shields.io/github/stars/reenphygeorge/sjcet-labs.svg?style=for-the-badge
-[stars-url]: https://github.com/reenphygeorge/sjcet-labs/stargazers
-[issues-shield]: https://img.shields.io/github/issues/reenphygeorge/sjcet-labs.svg?style=for-the-badge
-[issues-url]: https://github.com/reenphygeorge/sjcet-labs/issues
-[license-shield]: https://img.shields.io/github/license/reenphygeorge/sjcet-labs.svg?style=for-the-badge
-[license-url]: https://github.com/reenphygeorge/sjcet-labs/blob/main/LICENCE
+[contributors-shield]: https://img.shields.io/github/contributors/nexus-sjcet/voice-it.svg?style=for-the-badge
+[contributors-url]: https://github.com/nexus-sjcet/voice-it/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/nexus-sjcet/voice-it.svg?style=for-the-badge
+[forks-url]: https://github.com/nexus-sjcet/voice-it/network/members
+[stars-shield]: https://img.shields.io/github/stars/nexus-sjcet/voice-it.svg?style=for-the-badge
+[stars-url]: https://github.com/nexus-sjcet/voice-it/stargazers
+[issues-shield]: https://img.shields.io/github/issues/nexus-sjcet/voice-it.svg?style=for-the-badge
+[issues-url]: https://github.com/nexus-sjcet/voice-it/issues
+[license-shield]: https://img.shields.io/github/license/nexus-sjcet/voice-it.svg?style=for-the-badge
+[license-url]: https://github.com/nexus-sjcet/voice-it/blob/main/LICENCE
