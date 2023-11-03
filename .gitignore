@@ -143,3 +143,6 @@ ios
 
 # Android studio
 .idea
+
+#workspace important
+!.vscode/project.code-workspace

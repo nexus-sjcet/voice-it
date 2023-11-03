@@ -1,0 +1,21 @@
+{
+    "folders": [
+        {
+            "path": "..",
+            "name": "root",
+        },
+        {
+            "name": "vscode",
+            "path": "../apps/vscode/"
+        },
+        {
+            "name": "browser",
+            "path": "../apps/browser/"
+        },
+        {
+            "name": "web",
+            "path": "../apps/web/"
+        },
+
+    ]
+}
