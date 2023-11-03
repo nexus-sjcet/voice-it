@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { language } from './languages';
 import { consoler } from '../util/console';
+import { getMD } from '../components/web-view';
 
 
 function getImage(path: string, dir: string = "") {
@@ -27,8 +28,16 @@ const hoverTypeSwitch = (lineText: string, path: string) => {
         case "jpg":
         case "jpeg":
         case "gif":
+
             return getImage(path, `${splitted[1]}.${splitted[2]}`);
-        // case "md":
+
+        case "md": {
+
+            const webViewPanel = vscode.window.createWebviewPanel("test", "test", vscode.ViewColumn.One, { enableScripts: true });
+            getMD(`${splitted[1]}.${splitted[2]}`, webViewPanel);
+
+            return null;    
+        }
         // case "json":
         // case "txt":
         // case "html":
