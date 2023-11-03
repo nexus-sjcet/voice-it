@@ -3,20 +3,30 @@ type Cache = {
         [key: string]: {
             header: string;
             body: string;
+            type: "md" | "image" | "audio" | "video";
         }
     }
+}
+
+type Config = {
+    "host": "localhost" | string,
+    "root": string,
+    "assets": string,
 }
 
 type CMD = {
     addComment: "✦",
     openFile: "📂",
+    openLink: "🔗",
+
+    activate: "⚡",
 }
 
-type ObtainKeys<Obj, Type=any> = {
+type ObtainKeys<Obj, Type = any> = {
     [Prop in keyof Obj]: Obj[Prop] extends Type ? Prop : never
 }[keyof Obj]
 
-type ObtainValues<Obj, Type=any> = Obj[keyof Obj]
+type ObtainValues<Obj, Type = any> = Obj[keyof Obj]
 
 type Pretty<T> = {
     [K in keyof T]: T[K]

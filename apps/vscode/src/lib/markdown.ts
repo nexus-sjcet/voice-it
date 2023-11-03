@@ -1,4 +1,4 @@
-const regex = /#(.*?)\s+#{6}\s⊷\s(\d.+)+\s([\s\S]*?)(?=(?:#|$))/g;
+const regex = /#(.*?)\s+#{6}\s✦\s(\d.+)+\s([\s\S]*?)(?=(?:#|$))/g;
 //                           ☝️ identifier
 
 
@@ -12,7 +12,7 @@ export function extractMD(markdown: string) {
         const id = match[2];
         const body = match[3].trim();
 
-        doc[id] = { header, body };
+        doc[id] = { header, body, type: "md" };
     }
 
     return doc;

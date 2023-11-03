@@ -1,12 +1,11 @@
 import * as vscode from 'vscode';
 import { language } from './languages';
 import { consoler } from '../util/console';
-import { getMD } from '../components/web-view';
+import { getMD, getMultiMedia } from '../components/web-view';
+import { cmd } from './cmd';
 
 
-function getImage(path: string, dir: string = "") {
-    let link = dir.trim();
-    link = link.replaceAll("\\", "/");
+function getImage(path: string, link: string) {
 
     const parent = path.split("/").slice(0, -1).join("/");
     const fullPath = `${parent}/${link}`;
@@ -23,20 +22,25 @@ const hoverTypeSwitch = (lineText: string, path: string) => {
         return;
     }
 
+    const fileName = `${splitted[1]}.${splitted[2]}`.trim().replaceAll("\\", "/");
+
     switch (splitted[2]) {
         case "png":
         case "jpg":
         case "jpeg":
         case "gif":
+        case "webm":
 
-            return getImage(path, `${splitted[1]}.${splitted[2]}`);
+            return getImage(path, fileName);
 
         case "md": {
-
-            const webViewPanel = vscode.window.createWebviewPanel("test", "test", vscode.ViewColumn.One, { enableScripts: true });
-            getMD(`${splitted[1]}.${splitted[2]}`, webViewPanel);
-
-            return null;    
+            const action = {
+                text: "Open",
+                callback: () => getMD(fileName)
+            };
+            consoler.action(`Do you like to open ${fileName} ?`,  [action]);
+            
+            return null;
         }
         // case "json":
         // case "txt":
@@ -47,23 +51,44 @@ const hoverTypeSwitch = (lineText: string, path: string) => {
         // case "tsx":
         // case "jsx":
         //     return;
-        // case "mp4":
-        // case "webm":
-        // case "mp3":
-        // case "wav":
-        // case "ogg":
-        //     vscode.window.createWebviewPanel("test", "test", vscode.ViewColumn.One, { enableScripts: true });
+        case "mp3":
+        case "wav":
+        case "ogg": {
+
+            const action = {
+                text: "Open",
+                callback: () => getMultiMedia(fileName, "audio")
+            };
+            consoler.action(`Do you like to open ${fileName} ?`,  [action]);
+            
+            return null;
+        }
+        case "mp4": {
+
+            const action = {
+                text: "Open",
+                callback: () => getMultiMedia(fileName, "video")
+            };
+            consoler.action(`Do you like to open ${fileName} ?`,  [action]);
+            
+            return null;
+        }
 
 
 
 
         default: {
 
-            const fullPath = '${splitted[1]}.${splitted[2]}';
+            // const action = {
+            //     text: "Open",
+            //     callback: () => getMultiMedia(fileName, "video")
+            // };
+            // consoler.action(`Do you like to open ${fileName} ?`,  [action]);
+            
 
             const hoverContent = new vscode.MarkdownString();
-            hoverContent.appendMarkdown(`[Use activiy bar to open ${splitted[2]} file](command:extension.openFile?${fullPath})`);
-
+            const text = `command:${cmd.openLink}?${encodeURIComponent(fileName)}`;
+            hoverContent.appendMarkdown(`[Use activiy bar to open ${splitted[2]} file](${text})`);
 
             return hoverContent;
         }

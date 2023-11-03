@@ -3,8 +3,8 @@ const md = require('markdown-it')();
 import * as fs from "fs";
 import * as path from 'path';
 
-export const getMD = (dir: string, panel: vscode.WebviewPanel) => {
-    let link = dir.trim();
+export const getMD = (link: string) => {
+    const panel = vscode.window.createWebviewPanel("markdown", link, vscode.ViewColumn.One, { enableScripts: true });
     const basePath = vscode.workspace.rootPath;
     const absoluteFilePath = path.join(basePath || "", link);
 
@@ -24,3 +24,29 @@ export const getMD = (dir: string, panel: vscode.WebviewPanel) => {
         console.error(err);
     }
 };
+
+export const getMultiMedia = (link: string, type: "audio" | "video") => {
+
+    
+    const panel = vscode.window.createWebviewPanel(type, link, vscode.ViewColumn.One, { enableScripts: true });
+
+    const basePath = vscode.workspace.rootPath;
+    const absoluteFilePath = path.join(basePath || "", link);
+    const mediaPath = vscode.Uri.file(absoluteFilePath);
+
+    const src = panel.webview.asWebviewUri(mediaPath);
+
+
+    const template = type === "audio" ? `
+    <audio controls>
+        <source src="${src}" type="audio/${link.split(".").pop()}">
+        </audio>
+        ` : `
+    <video controls>
+        <source src="${src}" type="video/${link.split(".").pop()}">
+        </video>
+        `;
+
+    panel.webview.html = template;
+
+}; 
