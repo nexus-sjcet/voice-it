@@ -1,26 +1,31 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { disposable as hoverImageDisposable } from './lib/hover';
+import { addCommentFunc } from './lib/add-comment';
+import { cmd } from './lib/cmd';
+import { consoler } from './util/console';
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "voice-notes" is now active!');
+	const cache: Cache = {};
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('voice-notes.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from voice-notes!');
+	const addCommentDisposable = addCommentFunc("addComment");
+
+
+
+	context.subscriptions.push(addCommentDisposable);
+	context.subscriptions.push(hoverImageDisposable);
+
+	const openFileCommand = vscode.commands.registerCommand(cmd.openFile, (dynamicFilePath) => {
+		if (dynamicFilePath) {
+			consoler.log(dynamicFilePath);
+			// const decodedFilePath = decodeURIComponent(dynamicFilePath);
+			// vscode.workspace.openTextDocument(decodedFilePath).then((document) => {
+			// 	vscode.window.showTextDocument(document);
+			// });
+		}
 	});
 
-	context.subscriptions.push(disposable);
+	// Register the command
+	context.subscriptions.push(openFileCommand);
 }
-
-// This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

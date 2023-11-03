@@ -9,13 +9,40 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onCommand:project-name.openFile"
+  ],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "comment",
+          "title": "Comment",
+          "icon": "./out/assets/logo.svg"
+        }
+      ]
+    },
+    "views": {
+      "comment": [
+        {
+          "id": "comment-current-file",
+          "name": "Current File"
+        },
+        {
+          "id": "comment-entire-workspace",
+          "name": "Entire Workspace"
+        }
+      ]
+    },
     "commands": [
       {
-        "command": "voice-it.helloWorld",
-        "title": "Hello World"
+        "command": "project-name.addComment",
+        "title": "Comment: Add Image, Gif, Doc, Video etc"
+      },
+      {
+        "command": "project-name.openFile",
+        "title": "Comment: Add Image, Gif, Doc, Video etc"
       }
     ]
   },
