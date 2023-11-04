@@ -43,6 +43,10 @@
       {
         "command": "project-name.openFile",
         "title": "Comment: Add Image, Gif, Doc, Video etc"
+      },
+      {
+        "command": "project-name.myCommand",
+        "title": "My Command"
       }
     ]
   },

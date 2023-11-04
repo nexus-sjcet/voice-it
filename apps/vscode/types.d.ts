@@ -8,6 +8,7 @@ type Cache = {
 }
 
 type CMD = {
+    
     addComment: "✦",
     openFile: "📂",
 }
