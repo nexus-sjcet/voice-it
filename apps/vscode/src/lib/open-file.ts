@@ -22,10 +22,11 @@ export async function openFile() {
 						path: selectedFile.path,
 						fs: selectedFile.fsPath,
 						type,
+						file: selectedFile
 					});
 				} else {
 					reject();
 				}
 			});
-	}) as Promise<{ path: string, fs: string, type: string }>;
+	}) as Promise<{ path: string, fs: string, type: string, file: any }>;
 }
