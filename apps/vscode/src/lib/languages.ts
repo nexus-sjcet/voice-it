@@ -2,6 +2,8 @@ export const language = {
     python: "#",
     javascript: "//",
     typescript: "//",
+    typescriptreact: "//",
+    javascriptreact: "//",
     java: "//",
     c: "//",
     cpp: "//",
