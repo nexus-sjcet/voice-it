@@ -46,6 +46,8 @@ export const addCommentFunc = () => {
                         copyFileToWorkspace(file.file, `${assetsPath}/${id}.${file_type}`)
                     }
                     consoler.log(`Done 👍 Added ${file.type} file`);
+
+                    vscode.commands.executeCommand("comment-current-file.refreshEntry");
                 });
             });
         }

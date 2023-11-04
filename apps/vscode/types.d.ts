@@ -22,6 +22,7 @@ type CMD = {
     openLink: "🔗",
 
     activate: "⚡",
+    workspace: "📚",
 }
 
 type ObtainKeys<Obj, Type = any> = {

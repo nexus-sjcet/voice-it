@@ -6,30 +6,27 @@ import { consoler } from './util/console';
 import * as path from 'path';
 import { cacheState } from './util/cache';
 import * as fs from "fs";
-import { jsonInit } from './lib/json';
+import { jsonInit, sidebarAction, workspaceInit } from './lib/json';
 import { readJson, writeJson } from './util/json-control';
 import { getWorkplace } from './lib/workspace';
+import { openFileCommand } from './lib/open-file';
 
 
 export function activate(context: vscode.ExtensionContext) {
-
+	// const {getPage} = cacheState();
 	context.subscriptions.push(jsonInit);
+	context.subscriptions.push(workspaceInit);
+	context.subscriptions.push(sidebarAction);
 	
 	
 	const addCommentDisposable = addCommentFunc();
 
 	context.subscriptions.push(addCommentDisposable);
 	context.subscriptions.push(hoverImageDisposable);
+	context.subscriptions.push(openFileCommand);
+	
 
-	const openFileCommand = vscode.commands.registerCommand(cmd.openFile, (dynamicFilePath) => {
-		if (dynamicFilePath) {
-			consoler.log(dynamicFilePath);
-			// const decodedFilePath = decodeURIComponent(dynamicFilePath);
-			// vscode.workspace.openTextDocument(decodedFilePath).then((document) => {
-			// 	vscode.window.showTextDocument(document);
-			// });
-		}
-	});
+	
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand(cmd.openLink, async (word) => {
@@ -39,7 +36,5 @@ export function activate(context: vscode.ExtensionContext) {
 		})
 	);
 
-	// Register the command
-	context.subscriptions.push(openFileCommand);
 }
 export function deactivate() { }

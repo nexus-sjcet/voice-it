@@ -28,7 +28,7 @@ export const getMD = (link: string) => {
 export const getMultiMedia = (link: string, type: "audio" | "video") => {
 
     
-    const panel = vscode.window.createWebviewPanel(type, link, vscode.ViewColumn.One, { enableScripts: true });
+    const panel = vscode.window.createWebviewPanel(type, link, vscode.ViewColumn.Three, { enableScripts: true });
 
     const basePath = vscode.workspace.rootPath;
     const absoluteFilePath = path.join(basePath || "", link);
@@ -36,9 +36,11 @@ export const getMultiMedia = (link: string, type: "audio" | "video") => {
 
     const src = panel.webview.asWebviewUri(mediaPath);
 
+    const style = `margin: 4rem;`;
+
 
     const template = type === "audio" ? `
-    <audio controls>
+    <audio controls style="${style}">
         <source src="${src}" type="audio/${link.split(".").pop()}">
         </audio>
         ` : `

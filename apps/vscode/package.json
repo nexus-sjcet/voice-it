@@ -14,6 +14,20 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "viewsWelcome": [
+      {
+        "view": "comment-current-file",
+        "contents": "Comments are not initiated. \n[Activate current file](command:project-name.activate)"
+      },
+      {
+        "view": "comment-entire-workspace",
+        "contents": "Comments are not initiated. \n[Activate entire workspace](command:project-name.workspaceactivate)"
+      },
+      {
+        "view": "comment-image",
+        "contents": "![](./out/assets/logo.svg)"
+      }
+    ],
     "viewsContainers": {
       "activitybar": [
         {
@@ -24,18 +38,34 @@
       ]
     },
     "views": {
+      
       "comment": [
         {
           "id": "comment-current-file",
-          "name": "Current File"
+          "name": "Current File",
+          "icon": "./out/assets/logo.svg"
         },
         {
           "id": "comment-entire-workspace",
           "name": "Entire Workspace"
+        },
+        {
+          "id": "comment-image",
+          "name": "Image",
+          "type": "tree",
+          "visibility": "hidden"
         }
       ]
     },
     "commands": [
+      {
+        "command": "comment-current-file.refreshEntry",
+        "title": "Refresh",
+        "icon": {
+          "light": "./out/assets/logo.svg",
+          "dark": "./out/assets/logo.svg"
+          }
+        },
       {
         "command": "project-name.addComment",
         "title": "Comment: Add Image, Gif, Doc, Video etc"
@@ -48,7 +78,15 @@
         "command": "project-name.activate",
         "title": "Comment: Activate Workspace"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "comment-current-file.refreshEntry",
+          "when": "view == comment-current-file",
+          "group": "navigation"
+        }
+      ]}
   },
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
