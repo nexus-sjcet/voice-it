@@ -6,45 +6,17 @@ import { consoler } from './util/console';
 import * as path from 'path';
 import { cacheState } from './util/cache';
 import * as fs from "fs";
+import { jsonInit } from './lib/json';
+import { readJson, writeJson } from './util/json-control';
+import { getWorkplace } from './lib/workspace';
+
 
 export function activate(context: vscode.ExtensionContext) {
-	let config;
 
-	const { getCache, initCache } = cacheState();
-
-	context.subscriptions.push(vscode.commands.registerCommand(cmd.activate, () => {
-
-		const basePath = vscode.workspace.rootPath;
-		const absoluteFilePath = path.join(basePath || "", "./comment.config.json");
-
-		try {
-			let file = fs.readFileSync(absoluteFilePath, 'utf-8');
-			config = JSON.parse(file) as Config;
-			
-			const absoluteFile = path.join(basePath || "", config?.root ,"./comment.json");
-			let commentFile = fs.readFileSync(absoluteFile, 'utf-8');
-
-			initCache(JSON.parse(commentFile) as Cache);
-
-			consoler.log(JSON.stringify(getCache()));
-		}
-		catch (err) {
-
-			consoler.log(JSON.stringify(err));
-
-		}
-			// const workspaceFolders = vscode.workspace.workspaceFolders;
-			// const config = vscode.workspace.getConfiguration("comment", vscode.Uri.file("./comment.config.json"));
-
-
-			// if (workspaceFolders) {
-
-			// }
-		}));
-
-
-
-	const addCommentDisposable = addCommentFunc("addComment");
+	context.subscriptions.push(jsonInit);
+	
+	
+	const addCommentDisposable = addCommentFunc();
 
 	context.subscriptions.push(addCommentDisposable);
 	context.subscriptions.push(hoverImageDisposable);

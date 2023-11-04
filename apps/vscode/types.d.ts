@@ -1,10 +1,12 @@
+type singleCommentData = {
+    header?: string;
+    body: string;
+    type: "md" | "image" | "audio" | "video" | "json";
+}
+
 type Cache = {
     [key: string]: {
-        [key: string]: {
-            header: string;
-            body: string;
-            type: "md" | "image" | "audio" | "video";
-        }
+        [key: string]: singleCommentData
     }
 }
 

@@ -3,46 +3,66 @@ import { language } from './languages';
 import { consoler } from '../util/console';
 import { getMD, getMultiMedia } from '../components/web-view';
 import { cmd } from './cmd';
+import { cacheState } from '../util/cache';
+import { getWorkplace, pathJoin, replaceSlash } from './workspace';
+import { readJson } from '../util/json-control';
 
 
-function getImage(path: string, link: string) {
+function getImage(path?: string) {
+    return path ? `![${path}](${vscode.Uri.file(path)})` : null;
 
-    const parent = path.split("/").slice(0, -1).join("/");
-    const fullPath = `${parent}/${link}`;
+}
+function getCode(path?: string) {
+    return path ? `![${path}](${vscode.Uri.file(path)})` : null;
 
-    return `![${fullPath}](${vscode.Uri.file(fullPath)})`;
 }
 
-const hoverTypeSwitch = (lineText: string, path: string) => {
-    const regexPattern = /✦(.*)\.(\w+)(?:\s(.+))?/;
+const hoverTypeSwitch = (lineText: string) => {
+    // const regexPattern = /✦(.*)\.(\w+)(?:\s(.+))?/;
+    const regexPattern = /✦ (\S+)(?: (.*))?/;
 
     const splitted = lineText.match(regexPattern);
-    // consoler.log(JSON.stringify(splitted)); // ["✦ \\comments\\assets\\gif.gif","\\comments\\assets","gif","gif", null]
-    if (!splitted) {
+    // consoler.log(JSON.stringify(splitted), path); // ["✦ 123456789","123456789", null]
+    if (!splitted || !splitted[1]) {
         return;
     }
 
-    const fileName = `${splitted[1]}.${splitted[2]}`.trim().replaceAll("\\", "/");
+    const fileNameId = splitted[1] || "";
+    const { getPageContent } = cacheState();
+    const work = getWorkplace();
+    const path = replaceSlash(work.file?.replace(work.path || "", "") || "");
+    const fileName = getPageContent(path || "", fileNameId)?.body;
+    // consoler.log(fileName);
 
-    switch (splitted[2]) {
+    const finalPath = pathJoin(work.path || "", fileName);
+
+
+
+    switch (fileName.split(".").pop()) {
         case "png":
         case "jpg":
         case "jpeg":
         case "gif":
         case "webm":
 
-            return getImage(path, fileName);
+            return getImage(finalPath);
 
         case "md": {
             const action = {
                 text: "Open",
                 callback: () => getMD(fileName)
             };
-            consoler.action(`Do you like to open ${fileName} ?`,  [action]);
-            
+            consoler.action(`Do you like to open ${fileName} ?`, [action]);
+
             return null;
         }
-        // case "json":
+        case "json":
+            const hoverContent = new vscode.MarkdownString();
+            const file = readJson(finalPath);
+            const text = "```" + `${JSON.stringify(file, null, 2)}` + "```";
+            hoverContent.appendMarkdown(text);
+            return hoverContent;
+
         // case "txt":
         // case "html":
         // case "css":
@@ -59,8 +79,8 @@ const hoverTypeSwitch = (lineText: string, path: string) => {
                 text: "Open",
                 callback: () => getMultiMedia(fileName, "audio")
             };
-            consoler.action(`Do you like to open ${fileName} ?`,  [action]);
-            
+            consoler.action(`Do you like to open ${fileName} ?`, [action]);
+
             return null;
         }
         case "mp4": {
@@ -69,8 +89,8 @@ const hoverTypeSwitch = (lineText: string, path: string) => {
                 text: "Open",
                 callback: () => getMultiMedia(fileName, "video")
             };
-            consoler.action(`Do you like to open ${fileName} ?`,  [action]);
-            
+            consoler.action(`Do you like to open ${fileName} ?`, [action]);
+
             return null;
         }
 
@@ -81,14 +101,14 @@ const hoverTypeSwitch = (lineText: string, path: string) => {
 
             // const action = {
             //     text: "Open",
-            //     callback: () => getMultiMedia(fileName, "video")
+            //     callback: () => getMultiMedia(finalPath, "video")
             // };
             // consoler.action(`Do you like to open ${fileName} ?`,  [action]);
-            
+
 
             const hoverContent = new vscode.MarkdownString();
-            const text = `command:${cmd.openLink}?${encodeURIComponent(fileName)}`;
-            hoverContent.appendMarkdown(`[Use activiy bar to open ${splitted[2]} file](${text})`);
+            const text = `command:${cmd.openLink}?${encodeURIComponent(finalPath)}`;
+            hoverContent.appendMarkdown(`[Use activiy bar to open ${splitted?.[1]} file](${text})`);
 
             return hoverContent;
         }
@@ -108,7 +128,7 @@ export const disposable = vscode.languages.registerHoverProvider({ language: "*"
         if (lineArray.length >= 1) {
             // consoler.log(lineArray[1], document.languageId);
 
-            const content = hoverTypeSwitch(lineArray[lineArray.length - 1], document.uri.path);
+            const content = hoverTypeSwitch(lineArray[lineArray.length - 1]);
             return content ? new vscode.Hover(content) : null;
         }
         return null;
