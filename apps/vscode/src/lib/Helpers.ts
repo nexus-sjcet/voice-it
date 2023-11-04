@@ -1,6 +1,13 @@
 import * as vscode from 'vscode';
 
-export async function copyFileToWorkspace(sourceFilePath: any, newFileName?: string) {
+const customConfigFileUri = vscode.Uri.file('comment.config.json');
+
+// Access the custom configuration settings
+const config = vscode.workspace.getConfiguration('myExtension', customConfigFileUri);
+// usage
+//const anotherSetting = config.get('anotherSetting');
+
+async function copyFileToWorkspace(sourceFilePath: any, newFileName?: string) {
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0]; // Assuming you want to copy to the first workspace folder
 
     if (workspaceFolder) {
@@ -25,4 +32,8 @@ export async function copyFileToWorkspace(sourceFilePath: any, newFileName?: str
     } else {
         vscode.window.showErrorMessage('No workspace folder found. Please open a workspace.');
     }
+}
+
+export {
+    copyFileToWorkspace, config
 }
