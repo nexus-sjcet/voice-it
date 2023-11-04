@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { cacheState } from '../util/cache';
 
 const customConfigFileUri = vscode.Uri.file('comment.config.json');
 
@@ -8,6 +9,7 @@ const config = vscode.workspace.getConfiguration('myExtension', customConfigFile
 //const anotherSetting = config.get('anotherSetting');
 
 async function copyFileToWorkspace(sourceFilePath: any, newFileName?: string) {
+
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0]; // Assuming you want to copy to the first workspace folder
 
     if (workspaceFolder) {
