@@ -1,22 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "target": "ESNext", /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ESNext' */
+    "module": "ESNext", /* Specify module code generation: 'CommonJS', 'AMD', 'System', 'UMD', 'ES6', 'ES2015', 'ESNext' */
+    "outDir": "browser-out", /* Redirect output structure to the directory */
+    "rootDir": "./src", /* Specify the root directory of input files */
+    "strict": false, /* Enable all strict type-checking options */
+    "esModuleInterop": true, /* Enables emit interoperability between CommonJS and ES Modules */
+    "skipLibCheck": true, /* Skip type checking of declaration files */
+    "forceConsistentCasingInFileNames": true, /* Ensure that casing is consistent in file names when doing imports */
+    "declaration": false
+    /* Add more compiler options as needed */
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*.ts" /* Specify TypeScript files to include in compilation (glob pattern) */
+  ],
+  "exclude": [
+    "node_modules" /* Exclude the node_modules folder from compilation */
+  ]
 }
