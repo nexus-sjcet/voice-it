@@ -18,4 +18,91 @@ if (window.location.hostname === "github.com") {
             sendResponse(data);
         }
     });
+    const link = document.createElement('link');
+    link.href = chrome.runtime.getURL('inject.css');
+    link.type = 'text/css';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+    let currentDiv = null;
+    const regexPattern = /✦ (\S+)(?: (.*))?/;
+    const elementsToModify = document.querySelectorAll('.pl-c');
+    const elementToModify2 = document.querySelector('.cpgGLU');
+    if (elementToModify2) {
+        elementToModify2.style.pointerEvents = 'all';
+    }
+    elementsToModify.forEach((elementToModify) => {
+        const value = elementToModify.attributes
+            .getNamedItem('data-code-text')
+            ?.value.replace('// ', '')
+            .match(regexPattern);
+        console.log(value);
+        if (value) {
+            const newDiv = document.createElement('div');
+            newDiv.textContent = value[1];
+            newDiv.classList.add('cmtpopup');
+            elementToModify.parentElement.insertBefore(newDiv, elementToModify);
+            elementToModify.addEventListener('mouseenter', () => {
+                if (currentDiv) {
+                    currentDiv.style.display = 'none';
+                }
+                if (newDiv) {
+                    newDiv.style.display = 'block';
+                    currentDiv = newDiv;
+                }
+            });
+            if (elementToModify instanceof HTMLElement) {
+                elementToModify.style.position = 'absolute';
+                elementToModify.style.zIndex = '0';
+                elementToModify.style.cursor = 'pointer';
+            }
+        }
+    });
 }
+const elementsToModify = document.querySelectorAll('.pl-c');
+const elementsToModify2 = document.querySelectorAll('.cpgGLU');
+// Change pointer-events to 'all'
+if (elementsToModify2) {
+    // ts-ignore
+    elementsToModify2.style.pointerEvents = 'all';
+}
+let currentDiv = null;
+const regexPattern = /✦ (\S+)(?: (.*))?/;
+elementsToModify.forEach((elementToModify) => {
+    const value = elementToModify.attributes
+        .getNamedItem('data-code-text')
+        ?.value.replace('// ', '')
+        .match(regexPattern);
+    console.log(value);
+    if (value) {
+        const newDiv = document.createElement('div');
+        newDiv.textContent = value[1];
+        // newDiv.innerHTML = `<div class="audio_container">
+        //     <img width="10" height="10" src="https://img.icons8.com/ios-glyphs/10/ffffff/play--v1.png" alt="play--v1"/>
+        //     </div>`;
+        newDiv.classList.add('cmtpopup');
+        // Event listener for the image within newDiv
+        // newDiv.querySelector('img').addEventListener('click', () => {
+        //     // Handle image click event
+        // });
+        elementToModify.parentElement.insertBefore(newDiv, elementToModify);
+        // Toggle the newDiv's visibility on mouseenter for each element
+        elementToModify.addEventListener('mouseenter', () => {
+            if (currentDiv) {
+                currentDiv.style.display = 'none'; // Hide the previously displayed div
+            }
+            if (newDiv) {
+                newDiv.style.display = 'block'; // Show the current div
+                currentDiv = newDiv; // Update the current div
+            }
+        });
+        // Toggle the newDiv's visibility on mouseleave for each element
+        // elementToModify.addEventListener('mouseleave', () => {
+        //     if (newDiv) {
+        //         newDiv.style.display = 'none';
+        //     }
+        // });
+        elementToModify.style.position = 'absolute';
+        elementToModify.style.zIndex = '0';
+        elementToModify.style.cursor = 'pointer';
+    }
+});
