@@ -10,10 +10,15 @@ import { jsonInit, sidebarAction, workspaceInit } from './lib/json';
 import { readJson, writeJson } from './util/json-control';
 import { getWorkplace } from './lib/workspace';
 import { openFileCommand } from './lib/open-file';
+import { myDecorationType } from './components/gutter';
+import { build } from './util/build';
+// import { line } from './lib/line-control';
 
 
 export function activate(context: vscode.ExtensionContext) {
-	// const {getPage} = cacheState();
+	const {getPage} = cacheState();
+
+	
 	context.subscriptions.push(jsonInit);
 	context.subscriptions.push(workspaceInit);
 	context.subscriptions.push(sidebarAction);
@@ -24,6 +29,11 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(addCommentDisposable);
 	context.subscriptions.push(hoverImageDisposable);
 	context.subscriptions.push(openFileCommand);
+
+	context.subscriptions.push(build);
+
+	context.subscriptions.push(myDecorationType); 
+	// context.subscriptions.push(line); 
 	
 
 	

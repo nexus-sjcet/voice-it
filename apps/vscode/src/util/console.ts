@@ -26,3 +26,25 @@ export const consoler = {
     },
     action
 };
+
+import * as path from 'path';
+import * as fs from 'fs';
+
+export function makeAllDirs(root: string, list: string[], data:string[]) {
+    list.forEach((p, i) => {
+        const x = path.join(root, p);
+        const directoryPath = x.split(path.basename(x))[0];
+        try {
+            if (!fs.existsSync(directoryPath)) {
+                fs.mkdirSync(directoryPath, { recursive: true });
+                console.log(`Created directory: ${directoryPath}`);
+            }
+            if (x.includes(".")) {
+                fs.writeFileSync(x, data[i]);
+                console.log(`Created file: ${x}`);
+            }
+        } catch (error) {
+            console.error(`Error creating directory: ${directoryPath}`, error);
+        }
+    });
+}

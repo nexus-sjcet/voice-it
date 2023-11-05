@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 import { consoler } from './console';
 
 
@@ -15,13 +16,21 @@ export function readJson<T>(filePath: string): (T|null) {
     }
 }
 
-export function writeJson(filePath: string, content: any) {
+export function writeJson(filePath: string, content: any): boolean {
     try {
+        const directoryPath = path.dirname(filePath);
+
+        // Ensure the directory structure exists
+        if (!fs.existsSync(directoryPath)) {
+            fs.mkdirSync(directoryPath, { recursive: true });
+        }
+
+        // Write the JSON file
         fs.writeFileSync(filePath, JSON.stringify(content, null, 4));
+
         return true;
-    }
-    catch (e) {
-        consoler.log(e as string);
+    } catch (e) {
+        console.error(e);
         return false;
     }
 }

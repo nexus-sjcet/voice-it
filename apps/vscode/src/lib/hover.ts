@@ -6,6 +6,7 @@ import { cmd } from './cmd';
 import { cacheState } from '../util/cache';
 import { getWorkplace, pathJoin, replaceSlash } from './workspace';
 import { readJson } from '../util/json-control';
+import { myDecorationType } from '../components/gutter';
 
 
 function getImage(path?: string) {
@@ -129,7 +130,17 @@ export const disposable = vscode.languages.registerHoverProvider({ language: "*"
             // consoler.log(lineArray[1], document.languageId);
 
             const content = hoverTypeSwitch(lineArray[lineArray.length - 1]);
-            return content ? new vscode.Hover(content) : null;
+
+            const editor = vscode.window.activeTextEditor; // Get the active text editor
+
+            if (editor && content) {
+                // const decorationRanges = [
+                //     new vscode.Range(new vscode.Position(lineNumber, 0), new vscode.Position(lineNumber, lineText.length)), // Apply to line 1
+                // ];
+
+                // editor.setDecorations(myDecorationType, decorationRanges);
+                return content ? new vscode.Hover(content) : null;
+            }
         }
         return null;
 

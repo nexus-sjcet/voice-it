@@ -6,6 +6,7 @@ export const cmd:{[k in keyof CMD]:string} = {
     openLink: envProjectName + ".openLink",
     activate: envProjectName + ".activate",
     workspace: envProjectName + ".workspaceactivate",
+    builddocs: envProjectName + ".builddocs",
 };
 
 export const editorComment:{[k in keyof CMD]:string} = {
@@ -14,6 +15,7 @@ export const editorComment:{[k in keyof CMD]:string} = {
     openLink: "🔗",
     activate: "⚡",
     workspace: "📚",
+    builddocs: "🛠️",
 };
 
 export const logoFiles:{[key in (singleCommentData["type"] | "code" | "txt")]:string} = {

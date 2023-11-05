@@ -1,35 +1,57 @@
-import { getWorkplace } from "../lib/workspace";
+import { getWorkplace, pathJoin } from "../lib/workspace";
 import { consoler } from "./console";
 import { readJson, writeJson } from "./json-control";
 import * as path from 'path';
+import * as fs from 'fs';
 
 const wrapper = () => {
     const basePath = getWorkplace().path;
-    const commentConfigJson = path.join(basePath || "", "./comment.config.json");
+    const commentConfigJson = pathJoin(basePath || "", "./comment.config.json");
 
+    
+    
     let config = readJson<Config>(commentConfigJson);
+    const commentJson = path.join(basePath || "", config?.root || "./docs", "./comment.json");
+    let cache = config ? readJson<Cache>(commentJson) || {} : {};
+
 
     if (!config) {
-		const configNew:Config = {
-			root: "./docs",
-			assets: "./docs/static",
-			host: "localhost"
-		};
-		// createFolder = (folderPath:string) => {};
-		const action = {
-			text: "Create config file",
-			callback: () => {
-                config = configNew;
-				writeJson(commentConfigJson, configNew);
-				// create folder;
-			}
-		};
-		consoler.action("No comment config file found, ", [action]);
-	}
+        const configNew: Config = {
+            root: "./docs",
+            assets: "./docs/static",
+            host: "localhost",
+            build: "./docs/build"
+        };
 
-    const commentJson = path.join(basePath || "", config?.root || "./docs", "./comment.json");
+
+        let dirs = [
+            "./docs/static/x.json",
+            "./docs/build/x.json",
+            "./docs/comment.json",
+            "./comment.config.json"
+        ];
+
+        let data = [
+            "", "", "{}", JSON.stringify(configNew, null, 4)
+        ];
+
     
-    let cache = readJson<Cache>(commentJson) || {};
+        const action = {
+            text: "Create config file",
+            callback: () => {
+
+                dirs.forEach((dir, i) => {
+                    writeJson(pathJoin(basePath || "", dir), data[i]);
+                });
+                
+                
+                config = configNew;
+                cache = {};
+            }
+        };
+        consoler.action("No comment config file found, ", [action]);
+    }
+
 
 
     const cacheState = () => {

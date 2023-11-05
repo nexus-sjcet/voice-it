@@ -21,18 +21,32 @@ export function extractMD(markdown: string) {
 import * as fs from 'fs';
 import * as path from 'path';
 
-
-export function readMD(workspace: string, fileName: string) {
+export function writeMD(filePath: string, content: any): boolean {
     try {
-        console.log(workspace, fileName);
-        const file = fs.readFileSync(path.join(__dirname, fileName), 'utf-8');
-        // const file = await fs.readFile(filePath, 'utf-8');
-        return file;
+        const directoryPath = path.dirname(filePath);
+
+        // Ensure the directory structure exists
+        if (!fs.existsSync(directoryPath)) {
+            fs.mkdirSync(directoryPath, { recursive: true });
+        }
+
+        // Write the Markdown file
+        fs.writeFileSync(filePath, content, 'utf-8');
+
+        return true;
+    } catch (e) {
+        console.error(e);
+        return false;
+    }
+}
+
+export function readMD(filePath: string): (string|null) {
+    try {
+        return fs.readFileSync(filePath, 'utf-8');
 
     }
     catch (e) {
-        console.log(e);
-        return "";
+        console.log(e as string);
+        return null;
     }
-
 }

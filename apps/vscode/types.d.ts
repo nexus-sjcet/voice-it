@@ -12,8 +12,9 @@ type Cache = {
 
 type Config = {
     "host": "localhost" | string,
-    "root": string,
-    "assets": string,
+    "root": "./docs" | string,
+    "assets": "./docs/static" | string,
+    "build": "./docs/build" | string
 }
 
 type CMD = {
@@ -23,6 +24,7 @@ type CMD = {
 
     activate: "⚡",
     workspace: "📚",
+    builddocs: "🛠️",
 }
 
 type ObtainKeys<Obj, Type = any> = {

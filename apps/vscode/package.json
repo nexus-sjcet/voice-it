@@ -25,7 +25,7 @@
       },
       {
         "view": "comment-image",
-        "contents": "![](./out/assets/logo.svg)"
+        "contents": "Comments are not Built. \n[Build docs for entire workspace](command:project-name.builddocs)"
       }
     ],
     "viewsContainers": {
@@ -52,8 +52,7 @@
         {
           "id": "comment-image",
           "name": "Image",
-          "type": "tree",
-          "visibility": "hidden"
+          "visibility": "collapsed"
         }
       ]
     },
