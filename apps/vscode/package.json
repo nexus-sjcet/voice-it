@@ -10,7 +10,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:project-name.openFile"
+    "onCommand:project-name.openFile",
+    "onCommand:project-name.openLink"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -66,6 +67,10 @@
           }
         },
       {
+        "command": "comment-on-editor-cmd",
+        "title": "idk"
+      },
+      {
         "command": "project-name.addComment",
         "title": "Comment: Add Image, Gif, Doc, Video etc"
       },
@@ -76,6 +81,10 @@
       {
         "command": "project-name.activate",
         "title": "Comment: Activate Workspace"
+      },
+      {
+        "command": "project-name.openLink",
+        "title": "Comment: Open File In WebView"
       }
     ],
     "menus": {

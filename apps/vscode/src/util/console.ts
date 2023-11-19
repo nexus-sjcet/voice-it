@@ -18,13 +18,11 @@ const action = (text: string, actions: Action[], model?: boolean) => {
     });
 };
 
-// const trash = console;
-
 export const consoler = {
-    log: (...args: string[]) => {
-        window.showInformationMessage(args.join(" "));
-    },
-    action
+    log: (...args: string[]) => window.showInformationMessage(args.join(" ")),
+    warn: (...args: string[]) => window.showWarningMessage(args.join(" ")),
+    error: (...args: string[]) => window.showErrorMessage(args.join(" ")),
+    action,
 };
 
 import * as path from 'path';

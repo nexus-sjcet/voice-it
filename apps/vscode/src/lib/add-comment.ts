@@ -1,20 +1,19 @@
+import * as cuid from 'cuid';
 import * as vscode from 'vscode';
-import { openFile } from './open-file';
-import { getWorkplace } from "./workspace";
+import { cacheState } from '../util/cache';
+import { consoler } from '../util/console';
+import { copyFileToWorkspace } from './Helpers';
 import { cmd, editorComment } from './cmd';
 import { language } from './languages';
-import { consoler } from '../util/console';
-import * as cuid from 'cuid';
-import { CacheState, cacheState } from '../util/cache';
-import { copyFileToWorkspace } from './Helpers';
-import path = require('path');
+import { openFile } from './open-file';
+import { getWorkplace } from "./workspace";
 
 export const addCommentFunc = () => {
     return vscode.commands.registerCommand(cmd.addComment, () => {
-        const { addPageContent, getCache, getConfig } = cacheState();
+        const { addPageContent, getConfig } = cacheState();
 
-        const x = getConfig()
-        const assetsPath = x ? x.assets : ""
+        const x = getConfig();
+        const assetsPath = x ? x.assets : "";
 
         const editor = vscode.window.activeTextEditor;
 
@@ -31,19 +30,18 @@ export const addCommentFunc = () => {
                     const id = cuid();
                     const text = `${language[comment]} ${editorComment.addComment} ${id}`;
 
-                    const file_type = relativePath.split(".").pop() || "md" as any
-                    const body = relativePath != file.fs ? `.${relativePath.replaceAll("\\", "/")}` : `${assetsPath}/${id}.${file_type}`
+                    const fileType = relativePath.split(".").pop() || "md" as any;
+                    const body = relativePath !== file.fs ? `.${relativePath.replaceAll("\\", "/")}` : `${assetsPath}/${id}.${fileType}`;
                     const data: singleCommentData = {
-                        // body: `.${relativePath.replaceAll("\\", "/")}`,
                         body,
-                        type: file_type,
+                        type: fileType,
                     };
 
                     addPageContent(currentFile, { key: id, value: data });
 
                     editBuilder.insert(editor.selection.active, text);
                     if (relativePath == file.fs) {
-                        copyFileToWorkspace(file.file, `${assetsPath}/${id}.${file_type}`)
+                        copyFileToWorkspace(file.file, `${assetsPath}/${id}.${fileType}`);
                     }
                     consoler.log(`Done 👍 Added ${file.type} file`);
 

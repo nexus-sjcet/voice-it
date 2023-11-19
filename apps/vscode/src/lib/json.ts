@@ -7,7 +7,7 @@ import { MyTreeItem, myTreeDataProvider } from "../components/tree";
 import { cacheState } from "../util/cache";
 import { getWorkplace, replaceSlash } from "./workspace";
 
-export const jsonInit = vscode.commands.registerCommand(cmd.activate, () => {
+export const activateCurrectPage = vscode.commands.registerCommand(cmd.activate, () => {
         const {getPage} = cacheState();
         const name = getWorkplace().file?.replace(getWorkplace().path || "", "")
         const datas = name ? getPage( replaceSlash(name) ) : {};

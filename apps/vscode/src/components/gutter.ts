@@ -1,27 +1,16 @@
 import * as vscode from 'vscode';
+import * as path from 'path';
 
-// const rootCustomConfig = workspace.getConfiguration("coverage-gutters.customizable");
-
-
-export const myDecorationType = vscode.window.createTextEditorDecorationType({
-    gutterIconPath: './out/assets/logo.svg', // Path to your icon image
-    overviewRulerLane: vscode.OverviewRulerLane.Full, // Specify the gutter lane
-    light: {
-        // Define the appearance for light themes
-        before: {
-            // contentText: '■', // Text or HTML content for the gutter
-        },
-    },
-    dark: {
-        outline: 'green',
-        outlineWidth: '10px',
-        outlineStyle: 'solid ',
-        backgroundColor: 'lightgreen',
-        before: {
-            margin: '1px',
-            // color: 'red',
-            // contentText: '■', // Text or HTML content for the gutter
-        },
-    },
-
-});                                                                                                                                                                
+export const decorationType = vscode.window.createTextEditorDecorationType({
+    gutterIconPath: path.join(__filename,"../../assets/logo.svg"),
+    gutterIconSize: "contain",
+    backgroundColor: new vscode.ThemeColor("widget.shadow"),
+    // color: new vscode.ThemeColor("disabledForeground"),
+    isWholeLine: true,
+    after: {
+        contentText: " ✦ ",
+        contentIconPath: path.join(__filename,"../assets/logo.svg"),
+        width: "100%",
+        margin: "0 0 0 10px"
+    }
+});

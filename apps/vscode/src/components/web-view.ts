@@ -30,8 +30,7 @@ export const getMultiMedia = (link: string, type: "audio" | "video") => {
     
     const panel = vscode.window.createWebviewPanel(type, link, vscode.ViewColumn.Three, { enableScripts: true });
 
-    const basePath = vscode.workspace.rootPath;
-    const absoluteFilePath = path.join(basePath || "", link);
+    const absoluteFilePath = path.join(vscode.workspace.rootPath || "", link);
     const mediaPath = vscode.Uri.file(absoluteFilePath);
 
     const src = panel.webview.asWebviewUri(mediaPath);

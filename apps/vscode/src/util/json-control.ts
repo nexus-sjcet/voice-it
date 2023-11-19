@@ -15,6 +15,15 @@ export function readJson<T>(filePath: string): (T|null) {
         return null;
     }
 }
+export function readFile(filePath: string): (string|null) {
+    try {
+        return fs.readFileSync(filePath, 'utf-8');
+    }
+    catch (e) {
+        consoler.log(e as string);
+        return null;
+    }
+}
 
 export function writeJson(filePath: string, content: any): boolean {
     try {

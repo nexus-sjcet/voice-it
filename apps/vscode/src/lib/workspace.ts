@@ -20,4 +20,6 @@ export const pathJoin = (...paths: string[]) => {
 
 export const replaceSlash = (path: string) => {
     return path.replaceAll(/(\/\/|\\)/g, '/');
-}
+};
+
+export const exactPath = (fileName:string) => path.join(workspace.rootPath || "", fileName);

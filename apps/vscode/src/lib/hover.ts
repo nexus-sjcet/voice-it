@@ -1,16 +1,15 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
-import { language } from './languages';
-import { consoler } from '../util/console';
-import { getMD, getMultiMedia } from '../components/web-view';
-import { cmd } from './cmd';
+import { getMultiMedia } from '../components/web-view';
 import { cacheState } from '../util/cache';
+import { consoler } from '../util/console';
+import { readFile, readJson } from '../util/json-control';
+import { language } from './languages';
 import { getWorkplace, pathJoin, replaceSlash } from './workspace';
-import { readJson } from '../util/json-control';
-import { myDecorationType } from '../components/gutter';
 
 
-function getImage(path?: string) {
-    return path ? `![${path}](${vscode.Uri.file(path)})` : null;
+function getImage(path: string, altText?: string) {
+    return `![${altText || path}](${vscode.Uri.file(path)})`;
 
 }
 function getCode(path?: string) {
@@ -19,7 +18,6 @@ function getCode(path?: string) {
 }
 
 const hoverTypeSwitch = (lineText: string) => {
-    // const regexPattern = /✦(.*)\.(\w+)(?:\s(.+))?/;
     const regexPattern = /✦ (\S+)(?: (.*))?/;
 
     const splitted = lineText.match(regexPattern);
@@ -31,15 +29,16 @@ const hoverTypeSwitch = (lineText: string) => {
     const fileNameId = splitted[1] || "";
     const { getPageContent } = cacheState();
     const work = getWorkplace();
-    const path = replaceSlash(work.file?.replace(work.path || "", "") || "");
-    const fileName = getPageContent(path || "", fileNameId)?.body;
+    const pathFile = replaceSlash(work.file?.replace(work.path || "", "") || "");
+    const file = getPageContent(pathFile || "", fileNameId)
+    const fileName = file?.body;
     // consoler.log(fileName);
 
     const finalPath = pathJoin(work.path || "", fileName);
 
 
-
-    switch (fileName.split(".").pop()) {
+    const filenameTemp = file?.type as string;
+    switch (filenameTemp) {
         case "png":
         case "jpg":
         case "jpeg":
@@ -48,70 +47,80 @@ const hoverTypeSwitch = (lineText: string) => {
 
             return getImage(finalPath);
 
+        case "txt":
         case "md": {
-            const action = {
-                text: "Open",
-                callback: () => getMD(fileName)
-            };
-            consoler.action(`Do you like to open ${fileName} ?`, [action]);
+            let text = readFile(finalPath) || "";
+            const imagePathDir = path.dirname(finalPath);
+            text = text.replace(
+                /!\[([^\]]*)\]\((.*?)\)/g, // dont touch this
+                (match, altText, imagePath) => {
+                    const newImagePath = pathJoin(imagePathDir || "", imagePath);
+                    return getImage(newImagePath, altText);
+                }
+            );
 
-            return null;
+            const MD = new vscode.MarkdownString();
+            MD.isTrusted = true;
+            MD.supportThemeIcons = true;
+            MD.supportHtml = true;
+            MD.appendMarkdown("$(markdown)\n");
+            MD.appendMarkdown(`[Open the File](${vscode.Uri.file(finalPath)})\n\n`);
+            MD.appendMarkdown(text);
+
+            return MD;
         }
-        case "json":
-            const hoverContent = new vscode.MarkdownString();
+        case "json": {
+
             const file = readJson(finalPath);
-            const text = "```" + `${JSON.stringify(file, null, 2)}` + "```";
-            hoverContent.appendMarkdown(text);
-            return hoverContent;
+            const text = JSON.stringify(file, null, 2);
 
-        // case "txt":
-        // case "html":
-        // case "css":
-        // case "js":
-        // case "ts":
-        // case "tsx":
-        // case "jsx":
-        //     return;
-        case "mp3":
-        case "wav":
-        case "ogg": {
+            const MD = new vscode.MarkdownString();
+            MD.isTrusted = true;
+            MD.supportThemeIcons = true;
+            MD.supportHtml = true;
+            MD.appendMarkdown("$(file-code)\n");
+            MD.appendMarkdown(`[Open the File](${vscode.Uri.file(finalPath)})\n\n`);
+            MD.appendCodeblock(text, "json");
 
-            const action = {
-                text: "Open",
-                callback: () => getMultiMedia(fileName, "audio")
-            };
-            consoler.action(`Do you like to open ${fileName} ?`, [action]);
-
-            return null;
-        }
-        case "mp4": {
-
-            const action = {
-                text: "Open",
-                callback: () => getMultiMedia(fileName, "video")
-            };
-            consoler.action(`Do you like to open ${fileName} ?`, [action]);
-
-            return null;
+            return MD;
         }
 
+        case "html":
+        case "css":
+        case "js":
+        case "ts":
+        case "tsx":
+        case "jsx": {
+            const text = readFile(finalPath) || "";
 
+            const MD = new vscode.MarkdownString();
+            MD.isTrusted = true;
+            MD.supportThemeIcons = true;
+            MD.supportHtml = true;
+            MD.appendMarkdown("$(file-code)\n");
+            MD.appendMarkdown(`[Open the File](${vscode.Uri.file(finalPath)})\n\n`);
+            MD.appendCodeblock(text);
 
-
+            return MD;
+        }
         default: {
 
-            // const action = {
-            //     text: "Open",
-            //     callback: () => getMultiMedia(finalPath, "video")
-            // };
-            // consoler.action(`Do you like to open ${fileName} ?`,  [action]);
+            if (["mp3", "wav", "ogg", "mp4"].some(() => filenameTemp)) {
+                const action = {
+                    text: "Open",
+                    callback: () => getMultiMedia(fileName, filenameTemp === "mp4" ? "video" : "audio")
+                };
+                consoler.action(`Do you like to open ${fileName} ?`, [action]);
+            }
 
+            const MD = new vscode.MarkdownString();
+            MD.isTrusted = true;
+            MD.supportThemeIcons = true;
+            MD.supportHtml = true;
+            MD.appendMarkdown("$(file-media)\n");
+            MD.appendMarkdown(`[Open the File](${vscode.Uri.file(finalPath)})`);
 
-            const hoverContent = new vscode.MarkdownString();
-            const text = `command:${cmd.openLink}?${encodeURIComponent(finalPath)}`;
-            hoverContent.appendMarkdown(`[Use activiy bar to open ${splitted?.[1]} file](${text})`);
-
-            return hoverContent;
+            return MD;
         }
     }
 
@@ -138,7 +147,7 @@ export const disposable = vscode.languages.registerHoverProvider({ language: "*"
                 //     new vscode.Range(new vscode.Position(lineNumber, 0), new vscode.Position(lineNumber, lineText.length)), // Apply to line 1
                 // ];
 
-                // editor.setDecorations(myDecorationType, decorationRanges);
+                // editor.setDecorations(decorationType, decorationRanges);
                 return content ? new vscode.Hover(content) : null;
             }
         }
