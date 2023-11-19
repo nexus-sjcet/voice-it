@@ -1,8 +1,10 @@
 type GitHubMessage = {
-    action: 'getGitHubData';
+    action: 'getGitHubData' | 'sample';
+    message: Data;
 }
 
 interface Data {
+    url: string;
     username: string;
     repo: string;
     branch: string;
@@ -10,6 +12,10 @@ interface Data {
     content: CurrentPageContent;
     message: '' | 'Init Error' | 'Not Repo' | 'Success';
 }
+
+// type ResponseData = {
+    
+// }
 
 type Config = {
     root: string;

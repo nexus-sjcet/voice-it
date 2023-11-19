@@ -8,7 +8,7 @@
     "test": "turbo run test",
     "dev": "turbo run dev",
     "web": "pnpm --filter web dev",
-    "browser": "pnpm --filter browser dev",
+    "firefox": "pnpm --filter firefox dev",
     "lint": "eslint . --ext js,jsx,ts,tsx",
     "lint-fix": "eslint . --ext js,jsx,ts,tsx --fix",
     "turbo": "turbo"

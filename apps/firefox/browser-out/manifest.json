@@ -4,7 +4,6 @@
     "version": "1.0",
     "permissions": [
         "activeTab",
-        "tabs",
         "storage"
     ],
     "browser_action": {
@@ -22,8 +21,7 @@
                 "*://github.com/*"
             ],
             "js": [
-                "content.js",
-                "popup.js"
+                "content.js"
             ]
         }
     ]
