@@ -13,6 +13,10 @@
             "path": "../apps/browser/"
         },
         {
+            "name": "browser-jovit",
+            "path": "../apps/browser2/"
+        },
+        {
             "name": "web",
             "path": "../apps/web/"
         },
